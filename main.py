@@ -40,21 +40,37 @@ class Main(tk.Tk):
         self.tableau.pack()
         self.menu = tk.Menu(self)
         self.config(menu=self.menu)
-        self.menu.add_command(label="Ajouter un élève", command=self.ajouter_apprenant)
-        self.menu.add_command(label="Supprimer un élève", command=self.supprimer_apprenant)
-        self.menu.add_command(label="Associer un élève à une classe", command=self.associer_apprenant_classe)
-        self.menu.add_command(label="Afficher la liste de tous les élèves", command=self.afficher_apprenant)
-        self.menu.add_command(label="Afficher les élèves d’une classe", command=self.afficher_apprenant_classe)
-        self.menu.add_command(label="Ajouter un enseignant", command=self.ajouter_enseignant)
-        self.menu.add_command(label="Associer un enseignant à des matières", command=self.associer_enseignant_matiere)
-        self.menu.add_command(label="Afficher la liste des enseignants avec leurs matières",
-                              command=self.afficher_enseignant_matiere)
-        self.menu.add_command(label="Supprimer un enseignant", command=self.supprimer_enseignant)
-        self.menu.add_command(label="Ajouter une matière", command=self.ajouter_matiere)
-        self.menu.add_command(label="Supprimer une matière", command=self.supprimer_matiere)
-        self.menu.add_command(label="Ajouter un cours", command=self.ajouter_cours)
-        self.menu.add_command(label="Supprimer un cours", command=self.supprimer_cours)
-        self.menu.add_command(label="Modifier un cours", command=self.modifier_cours)
+
+        self.file = tk.Menu(self.menu, tearoff=0)
+
+        self.menu.add_cascade(label="Section élève", menu=self.file)
+        self.file.add_command(label="Ajouter un élève", command=self.ajouter_apprenant)
+        self.file.add_command(label="Supprimer un élève", command=self.supprimer_apprenant)
+        self.file.add_command(label="Associer un élève à une classe", command=self.associer_apprenant_classe)
+        self.file.add_command(label="Afficher la liste de tous les élèves", command=self.afficher_apprenant)
+        self.file.add_command(label="Afficher les élèves d’une classe", command=self.afficher_apprenant_classe)
+
+        self.enseigne = tk.Menu(self.menu, tearoff=0)
+
+        self.menu.add_cascade(label="Section enseignants", menu=self.enseigne)
+        self.enseigne.add_command(label="Ajouter un enseignant", command=self.ajouter_enseignant)
+        self.enseigne.add_command(label="Associer un enseignant à des matières", command=self.associer_enseignant_matiere)
+        self.enseigne.add_command(label="Afficher la liste des enseignants avec leurs matières", command=self.afficher_enseignant_matiere)
+        self.enseigne.add_command(label="Supprimer un enseignant", command=self.supprimer_enseignant)
+
+        self.matiere = tk.Menu(self.menu, tearoff=0)
+
+        self.menu.add_cascade(label="Section matière", menu=self.matiere)
+        self.matiere.add_command(label="Ajouter une matière", command=self.ajouter_matiere)
+        self.matiere.add_command(label="Supprimer une matière", command=self.supprimer_matiere)
+
+        self.cours = tk.Menu(self.menu, tearoff=0)
+
+        self.menu.add_cascade(label="Section cours", menu=self.matiere)
+        self.cours.add_command(label="Ajouter un cours", command=self.ajouter_cours)
+        self.cours.add_command(label="Supprimer un cours", command=self.supprimer_cours)
+        self.cours.add_command(label="Modifier un cours", command=self.modifier_cours)
+
         self.menu.add_command(label="Quitter", command=self.destroy)
 
     def ajouter_apprenant(self):
