@@ -613,6 +613,7 @@ class ModifierCours(tk.Toplevel):
         self.conn.close()
         self.parent.refresh()
         self.destroy()
+        ##
 
 if __name__ == "__main__":
     app = Main()
