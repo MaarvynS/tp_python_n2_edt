@@ -3,19 +3,6 @@
 import tkinter as tk
 from tkinter import ttk
 import sqlite3
-import datetime
-import time
-import os
-import sys
-import subprocess
-import webbrowser
-import re
-import tkinter.messagebox as tkmb
-
-
-# Dans une fenêtre principale, afficher l’emploi du temps d’une classe par rapport à
-# une plage de date que l’utilisateur pourra renseigner. On pourra aussi renseigner le nom
-# d’un élève pour récupérer son emploi du temps.
 
 # La base de données est composée de 7 tables :
 # - APPRENANT : nomApprenant TEXT, prenomApprenant TEXT, idApprenant INTEGER, idClasse INTERGER
@@ -25,38 +12,7 @@ import tkinter.messagebox as tkmb
 # - MATIERE : idMatiere INTEGER, libelleMatiere TEXT
 # - MATIERE ENSEIGNANT : k_idMatiere INTEGER, k_idEnseignant INTEGER
 
-# Pour un élève :
-# o Ajouter un élève
-# o Supprimer un élève
-# o Associer un élève à une classe
-# o Afficher la liste de tous les élèves
-# • Pour une classe :
-# o Afficher les élèves d’une classe
-# • Pour un enseignant :
-# o Ajouter un enseignant
-# o Associer un enseignant à des matières
-# o Afficher la liste des enseignants avec leurs matières
-# o Supprimer un enseignant
-# • Pour une matière :
-# o Ajouter une matière
-# o Supprimer une matière
-# • Pour un cours :
-# o Ajouter un cours
-# o Supprimer un cours
-# o Modifier un cours
-# Quelques règles de gestion viennent s’ajouter à cela :
-# • Il peut avoir deux élèves avec le même nom et le même prénom.
-# • Une classe doit forcément avoir des élèves.
-# • Un enseignant est obligé d’enseigner au moins une matière.
-# • On ne peut pas avoir deux matières avec le même nom.
-# • Un cours est affecté à une date et une période de la journée. Pour des raisons de
-# simplifications, un cours sera forcément un module de 4h (AM pour le Matin, PM
-# pour l’après-midi)
-# • On ne peut pas affecter plusieurs cours au même moment pour une classe.
-# • On ne peut pas affecter un enseignant à plusieurs cours qui se déroulent au même
-# moment.
 
-# Class pour se connecter à la base de données et selectionner tout les ELEVE et afficher le résultat dans un tableau
 class Bdd:
     def __init__(self):
         self.conn = sqlite3.connect("tp2bdd.db")
