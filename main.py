@@ -66,7 +66,7 @@ class Main(tk.Tk):
 
         self.cours = tk.Menu(self.menu, tearoff=0)
 
-        self.menu.add_cascade(label="Section cours", menu=self.matiere)
+        self.menu.add_cascade(label="Section cours", menu=self.cours)
         self.cours.add_command(label="Ajouter un cours", command=self.ajouter_cours)
         self.cours.add_command(label="Supprimer un cours", command=self.supprimer_cours)
         self.cours.add_command(label="Modifier un cours", command=self.modifier_cours)
@@ -194,7 +194,7 @@ class SupprimerApprenant(tk.Toplevel):
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("DELETE FROM APPRENANT WHERE ID = ?", (self.id.get(),))
+        self.cursor.execute("DELETE FROM APPRENANT WHERE idEleve = ?", (self.id.get(),))
         self.conn.commit()
         self.conn.close()
         self.parent.refresh()
@@ -224,7 +224,7 @@ class AssocierApprenantClasse(tk.Toplevel):
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("UPDATE APPRENANT SET CLASSE = ? WHERE ID = ?", (self.classe.get(), self.id.get()))
+        self.cursor.execute("UPDATE APPRENANT SET idClasse = ? WHERE idEleve = ?", (self.classe.get(), self.id.get()))
         self.conn.commit()
         self.conn.close()
         self.parent.refresh()
@@ -326,13 +326,17 @@ class AjouterEnseignant(tk.Toplevel):
         self.label_nom.pack()
         self.nom = tk.Entry(self)
         self.nom.pack()
+        self.label_prenom = tk.Label(self, text="Prenom :")
+        self.label_prenom.pack()
+        self.prenom = tk.Entry(self)
+        self.prenom.pack()
         self.bouton_valider = tk.Button(self, text="Valider", command=self.valider)
         self.bouton_valider.pack()
 
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("INSERT INTO ENSEIGNANT (NOM) VALUES (?)", (self.nom.get(),))
+        self.cursor.execute("INSERT INTO ENSEIGNANT (nomEnseignant, prenomEnseignant) VALUES (?, ?)", (self.nom.get(),self.prenom.get()))
         self.conn.commit()
         self.conn.close()
         self.parent.refresh()
@@ -358,7 +362,7 @@ class SupprimerEnseignant(tk.Toplevel):
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("DELETE FROM ENSEIGNANT WHERE ID = ?", (self.id.get(),))
+        self.cursor.execute("DELETE FROM ENSEIGNANT WHERE idEnseignant = ?", (self.id.get(),))
         self.conn.commit()
         self.conn.close()
         self.parent.refresh()
@@ -385,7 +389,7 @@ class AfficherApprenant(tk.Toplevel):
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("SELECT * FROM APPRENANT WHERE ID = ?", (self.id.get(),))
+        self.cursor.execute("SELECT * FROM APPRENANT WHERE idEleve = ?", (self.id.get(),))
         self.resultat["text"] = self.cursor.fetchone()
         self.conn.commit()
         self.conn.close()
@@ -412,7 +416,7 @@ class AfficherApprenantClasse(tk.Toplevel):
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("SELECT * FROM APPRENANT WHERE CLASSE = ?", (self.id.get(),))
+        self.cursor.execute("SELECT * FROM APPRENANT WHERE idClasse = ?", (self.id.get(),))
         self.resultat["text"] = self.cursor.fetchall()
         self.conn.commit()
         self.conn.close()
@@ -436,10 +440,11 @@ class AssocierEnseignantMatiere(tk.Toplevel):
         self.bouton_valider = tk.Button(self, text="Valider", command=self.valider)
         self.bouton_valider.pack()
 
+    #reste à voir pour la requête
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("UPDATE MATIERE SET ID_ENSEIGNANT = ? WHERE ID = ?", (self.id_enseignant.get(), self.id_matiere.get()))
+        self.cursor.execute("UPDATE ENSEIGNANT SET idEnseignant = ? WHERE idMatiere = ?", (self.id_enseignant.get(), self.id_matiere.get()))
         self.conn.commit()
         self.conn.close()
         self.parent.refresh()
@@ -462,10 +467,11 @@ class AfficherEnseignantMatiere(tk.Toplevel):
         self.resultat = tk.Label(self, text="")
         self.resultat.pack()
 
+    #a voir
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("SELECT * FROM MATIERE WHERE ID_ENSEIGNANT = ?", (self.id_enseignant.get(),))
+        self.cursor.execute("""SELECT * FROM ENSEIGNANT INNER JOIN MATIERE ON ENSEIGNANT = MATIERE.idMatiere""", (self.id_enseignant.get(),))
         self.resultat["text"] = self.cursor.fetchall()
         self.conn.commit()
         self.conn.close()
@@ -496,7 +502,7 @@ class AjouterCours(tk.Toplevel):
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("INSERT INTO COURS VALUES (NULL, ?, ?, ?)", (self.id_matiere.get(), self.id_apprenant.get(), self.date.get()))
+        self.cursor.execute("INSERT INTO COURS VALUES (?, ?, ?)", (self.id_matiere.get(), self.id_apprenant.get(), self.date.get()))
         self.conn.commit()
         self.conn.close()
         self.parent.refresh()
@@ -520,7 +526,7 @@ class SupprimerCours(tk.Toplevel):
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("DELETE FROM COURS WHERE ID = ?", (self.id.get(),))
+        self.cursor.execute("DELETE FROM COURS WHERE idCours = ?", (self.id.get(),))
         self.conn.commit()
         self.conn.close()
         self.parent.refresh()
@@ -548,7 +554,7 @@ class AjouterMatiere(tk.Toplevel):
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("INSERT INTO MATIERE VALUES (NULL, ?, ?)", (self.nom.get(), self.id_enseignant.get()))
+        self.cursor.execute("INSERT INTO MATIERE VALUES (?, ?)", (self.nom.get(), self.id_enseignant.get()))
         self.conn.commit()
         self.conn.close()
         self.parent.refresh()
@@ -583,18 +589,18 @@ class ModifierCours(tk.Toplevel):
         tk.Toplevel.__init__(self, parent)
         self.parent = parent
         self.title("Modifier un cours")
-        self.geometry("300x200")
+        self.geometry("300x300")
         self.resizable(width=False, height=False)
         self.config(background="#FFFFFF")
-        self.label_id = tk.Label(self, text="ID :")
+        self.label_id = tk.Label(self, text="ID matiere :")
         self.label_id.pack()
         self.id = tk.Entry(self)
         self.id.pack()
-        self.label_id_matiere = tk.Label(self, text="ID matière :")
+        self.label_id_matiere = tk.Label(self, text="jours cours  :")
         self.label_id_matiere.pack()
         self.id_matiere = tk.Entry(self)
         self.id_matiere.pack()
-        self.label_id_apprenant = tk.Label(self, text="ID apprenant :")
+        self.label_id_apprenant = tk.Label(self, text="heure cours :")
         self.label_id_apprenant.pack()
         self.id_apprenant = tk.Entry(self)
         self.id_apprenant.pack()
@@ -608,7 +614,7 @@ class ModifierCours(tk.Toplevel):
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute("UPDATE COURS SET ID_MATIERE = ?, ID_APPRENANT = ?, DATE = ? WHERE ID = ?", (self.id_matiere.get(), self.id_apprenant.get(), self.date.get(), self.id.get()))
+        self.cursor.execute("UPDATE COURS SET k_idMatiere = ?, joursCours = ?, heureCours = ? WHERE idCours= ?", (self.id_matiere.get(), self.id_apprenant.get(), self.date.get(), self.id.get()))
         self.conn.commit()
         self.conn.close()
         self.parent.refresh()
