@@ -30,12 +30,18 @@ class Bdd:
 
 class Main(tk.Tk):
     def __init__(self):
+
         tk.Tk.__init__(self)
         self.title("Emploi du temps")
         self.geometry("800x600")
         self.resizable(width=False, height=False)
         self.config(background="#FFFFFF")
         self.bdd = Bdd()
+
+        #faire un emploi du temps
+        self.emploi_du_temps = tk.Button(self, text="Emploi du temps", command=self.refresh)
+        self.emploi_du_temps.pack()
+
         self.tableau = Tableau(self, self.bdd.get_result())
         self.tableau.pack()
         self.menu = tk.Menu(self)
@@ -168,7 +174,7 @@ class AjouterApprenant(tk.Toplevel):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
         self.cursor.execute("INSERT INTO APPRENANT (nomApprenant, prenomApprenant, idClasse) VALUES (?, ?, ?)",
-                            (self.nom.get(), self.prenom.get(), self.classe.get()))
+                           (self.nom.get(), self.prenom.get(), self.classe.get()))
         self.conn.commit()
         self.conn.close()
         self.parent.refresh()
