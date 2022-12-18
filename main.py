@@ -1,4 +1,3 @@
-# create a timesheet from the database "tp2bdd.db" using tkinter
 
 import tkinter as tk
 from tkinter import ttk
@@ -23,10 +22,6 @@ class Bdd:
 
     def get_result(self):
         return self.result
-
-
-# Class pour créer la fenêtre principale
-
 
 class Main(tk.Tk):
     def __init__(self):
@@ -127,7 +122,6 @@ class Main(tk.Tk):
         self.tableau.pack()
 
 
-# Class pour créer le tableau qui affiche les élèves
 class Tableau(tk.Frame):
     def __init__(self, parent, result):
         tk.Frame.__init__(self, parent)
@@ -146,7 +140,6 @@ class Tableau(tk.Frame):
             self.tableau.insert("", "end", values=row)
 
 
-# Class pour créer la fenêtre pour ajouter un élève
 class AjouterApprenant(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
@@ -181,7 +174,6 @@ class AjouterApprenant(tk.Toplevel):
         self.destroy()
 
 
-# Class pour créer la fenêtre pour supprimer un élève
 class SupprimerApprenant(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
@@ -207,7 +199,6 @@ class SupprimerApprenant(tk.Toplevel):
         self.destroy()
 
 
-# Class pour créer la fenêtre pour associer un élève à une classe
 class AssocierApprenantClasse(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
@@ -237,7 +228,6 @@ class AssocierApprenantClasse(tk.Toplevel):
         self.destroy()
 
 
-# Class pour créer la fenêtre pour ajouter une classe
 class AjouterClasse(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
@@ -263,7 +253,6 @@ class AjouterClasse(tk.Toplevel):
         self.destroy()
 
 
-# Class pour créer la fenêtre pour supprimer une classe
 class SupprimerClasse(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
@@ -289,7 +278,6 @@ class SupprimerClasse(tk.Toplevel):
         self.destroy()
 
 
-# Class pour créer la fenêtre pour associer une classe à un professeur
 class AssocierClasseProfesseur(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
@@ -319,7 +307,6 @@ class AssocierClasseProfesseur(tk.Toplevel):
         self.destroy()
 
 
-# Class pour créer la fenêtre pour ajouter un professeur
 class AjouterEnseignant(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
@@ -349,7 +336,6 @@ class AjouterEnseignant(tk.Toplevel):
         self.destroy()
 
 
-# Class pour créer la fenêtre pour supprimer un professeur
 class SupprimerEnseignant(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
@@ -400,8 +386,6 @@ class AfficherApprenant(tk.Toplevel):
         self.conn.commit()
         self.conn.close()
 
-
-#Afficher les apprenant selon la classe
 class AfficherApprenantClasse(tk.Toplevel):
     def __init__(self, parent):
         tk.Toplevel.__init__(self, parent)
@@ -446,7 +430,6 @@ class AssocierEnseignantMatiere(tk.Toplevel):
         self.bouton_valider = tk.Button(self, text="Valider", command=self.valider)
         self.bouton_valider.pack()
 
-    #reste à voir pour la requête
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
@@ -473,7 +456,6 @@ class AfficherEnseignantMatiere(tk.Toplevel):
         self.resultat = tk.Label(self, text="")
         self.resultat.pack()
 
-    #a voir
     def valider(self):
         self.conn = sqlite3.connect("tp2bdd.db")
         self.cursor = self.conn.cursor()
